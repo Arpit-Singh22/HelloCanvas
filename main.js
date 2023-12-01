@@ -1,5 +1,6 @@
 import * as THREE from "three";
-
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+// console.log(OrbitControls);
 const scene = new THREE.Scene();
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 
@@ -45,7 +46,7 @@ camera.position.z = 5;
 
 //initialize the rederer
 const canvas = document.querySelector("canvas.threejs");
-const renderer = new THREE.WebGL1Renderer({ canvas: canvas });
+const renderer = new THREE.WebGLRenderer({ canvas: canvas });
 renderer.setSize(window.innerWidth, window.innerHeight, false);
 // renderer.render(scene, camera);
 
@@ -61,9 +62,14 @@ renderer.setSize(window.innerWidth, window.innerHeight, false);
 // }
 // requestAnimationFrame(render);
 
+// instantiate the controls
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.autoRotate = true;
+
 function render(time) {
   time *= 0.001; // convert time to seconds
-
+  controls.update();
   cubes.forEach((cube, ndx) => {
     const speed = 1 + ndx * 0.1;
     const rot = time * speed;
@@ -72,6 +78,7 @@ function render(time) {
   });
 
   renderer.render(scene, camera);
-  requestAnimationFrame(render);
+  window.requestAnimationFrame(render);
 }
-requestAnimationFrame(render);
+// requestAnimationFrame(render);
+render();
